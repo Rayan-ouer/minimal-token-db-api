@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Response
 from starlette.concurrency import run_in_threadpool
 from app.schemas.question import Question
-from app.services.factories import set_sql_agent, set_nlp_agent
+from app.prompt.prompt import sql_prompt, nlp_prompt, init_prompt
+from app.prompt.table_info import table_info
+from app.services.factories import init_ai_agent
 from app.db.database import (
     create_engine_for_sql_database,
     verify_and_extract_sql_query,
@@ -43,8 +45,15 @@ def initialize_app():
             logging.exception("Database engine initialization failed: %s", e)
             raise RuntimeError("Cannot initialize database engine") from e
 
-        app.state.sql_agent = set_sql_agent(engine)
-        app.state.nlp_agent = set_nlp_agent()
+        app.state.sql_agent = init_ai_agent(
+            model_config={"temperature": 0.1, "max_retries": 2}, 
+            engine=engine,
+            prompt_settings=init_prompt([("system", sql_prompt)], table_info=table_info))
+
+        app.state.nlp_agent = init_ai_agent(
+            model_config={"temperature": 0.3, "max_retries": 2},
+            prompt_settings=init_prompt([("system", nlp_prompt)],)
+        )
 
         try:
             sched = create_scheduler()

@@ -3,8 +3,10 @@ fastapi[standard]
 sqlalchemy==1.4.48
 pymysql==1.0.2
 python-dotenv
-langchain-groq
 langchain
+langchain-groq
+langchain-openai
+langchain-ollama
 sqlparse
 cryptography
 apscheduler

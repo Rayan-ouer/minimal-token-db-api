@@ -2,7 +2,9 @@ import time
 import os
 import logging
 from typing import Optional
-from app.services.factories import set_nlp_agent, set_sql_agent
+from app.prompt.prompt import sql_prompt, nlp_prompt, init_prompt
+from app.prompt.table_info import table_info
+from app.services.factories import init_ai_agent
 
 def reset_agents_memory(app) -> None:
     try:
@@ -49,8 +51,15 @@ def check_last_request_per_user(app, timeout_seconds: Optional[int] = None) -> N
 def reset_llm(app):
     try:
         engine = app.state.sql_agent._engine
-        app.state.sql_agent = set_sql_agent(engine)
-        app.state.nlp_agent = set_nlp_agent()
+        app.state.sql_agent = init_ai_agent(
+            model_config={"temperature": 0.1, "max_retries": 2}, 
+            engine=engine,
+            prompt_settings=init_prompt([("system", sql_prompt)], table_info=table_info))
+
+        app.state.nlp_agent = init_ai_agent(
+            model_config={"temperature": 0.3, "max_retries": 2},
+            prompt_settings=init_prompt([("system", nlp_prompt)],)
+        )
         logging.info("LLM agent has been reset.")
     except Exception as e:
         logging.error(f"Failed to reset LLM agent: {e}")
