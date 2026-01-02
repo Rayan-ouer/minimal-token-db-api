@@ -138,60 +138,6 @@ Total: ~1,160 tokens (89% reduction!)
    - Adapts tone and style
    - Handles errors gracefully
 
-### Token Optimization Techniques
-
-#### 1. Dynamic Schema Loading
-```python
-# Instead of sending all tables (5000+ tokens)
-FULL_SCHEMA = """
-items: id, name, price, category, supplier_id...
-stocks: id, item_id, quantity, location...
-stock_movements: id, type, quantity, date...
-customers: id, name, email, phone, address...
-# ... 20+ more tables
-"""
-
-# We send only relevant tables (200 tokens)
-RELEVANT_SCHEMA = """
-items: id, name, price, stock_quantity
-stocks: item_id, quantity, location
-# Only 2 tables for "show items low on stock"
-"""
-```
-
-#### 2. Conversation Memory Pruning
-```python
-# Instead of full history (2000+ tokens)
-FULL_HISTORY = [
-  {"q": "question 1", "a": "answer 1"},
-  {"q": "question 2", "a": "answer 2"},
-  # ... 10+ exchanges
-]
-
-# We keep only last 3 (150 tokens)
-OPTIMIZED_HISTORY = [
-  {"q": "question 8", "a": "answer 8"},
-  {"q": "question 9", "a": "answer 9"},
-  {"q": "question 10", "a": "answer 10"}
-]
-```
-
-#### 3. Result Compression
-```python
-# Instead of full results (3000+ tokens)
-FULL_RESULTS = [
-  {"id": 1, "name": "Product A", "qty": 5, "price": 29.99, ...},
-  {"id": 2, "name": "Product B", "qty": 3, "price": 19.99, ...},
-  # ... 100+ rows with all columns
-]
-
-# send compressed summary (500 tokens)
-COMPRESSED = {
-  "total_rows": 103,
-  "key_findings": ["12 items below minimum", "Total value: $15,234"],
-  "sample_data": [top 3 rows with essential columns only]
-}
-```
 
 ## 📋 Prerequisites
 
@@ -199,7 +145,7 @@ Before starting, ensure you have:
 
 - **Python 3.9+** installed on your machine
 - **Docker** and **Docker Compose** (recommended for deployment)
-- **MySQL** or compatible database
+- **SQL database** or compatible database
 - **LLM API Key**
 ## 🚀 Installation
 
@@ -218,24 +164,39 @@ Create a `.env` file at the root of the project:
 
 ```env
 # Database Configuration
-AI_USERNAME=your_db_username
-AI_PASSWORD=your_db_password
+AI_USERNAME=username
+AI_PASSWORD=password
 DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=your_database_name
+DB_DATABASE=database_name
 
-# LLM API Configuration (Groq example)
-GROQ_API_KEY=your_groq_api_key
-AI_MODEL=llama-3.1-70b-versatile
+# AI Provider (choose one)
+AI_PROVIDER=openai
+AI_MODEL=gpt-5-mini
 
-# For OpenAI instead:
-# OPENAI_API_KEY=your_openai_key
-# AI_MODEL=gpt-4
+# API Keys (Optional, ollama for example does not need it)
+OPENAI_API_KEY=sk-...
+GROQ_API_KEY=gsk_...
 
-# For Anthropic Claude:
-# ANTHROPIC_API_KEY=your_anthropic_key
-# AI_MODEL=claude-3-sonnet-20240229
+# Optional
+MEMORY_TIMEOUT_SECONDS=600  # Default: 10 minutes
 ```
+
+#### 3. Install Provider Dependencies
+
+The required provider library is already in `requirements.txt`. If you're adding a new provider:
+```bash
+# Already included:
+# - langchain-groq
+# - langchain-openai
+# - langchain-anthropic
+# - langchain-ollama
+
+pip install -r requirements.txt
+
+#### 4. add your ai provider library in requirement.txt
+langchain-openai
+langchain-ollama
 
 #### 3. Launch with Docker Compose
 
@@ -279,11 +240,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-#### 4. Configure environment variables
-
-Create a `.env` file as shown in Docker option.
-
-#### 5. Launch the application
+#### 4. Launch the application
 
 ```bash
 # Development mode with auto-reload
@@ -292,25 +249,6 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 # Production mode
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
-
-## ⚙ Configuration
-
-### Environment Variables
-
-```bash
-# Database Configuration
-AI_USERNAME=your_db_username
-AI_PASSWORD=your_db_password
-DB_HOST=localhost
-DB_PORT=3306
-DB_DATABASE=your_database_name
-
-# API Configuration
-API_KEY=your_api_key
-AI_MODEL=your_ai_model_name
-```
-
-*Only one API key is required
 
 ### Database Schema
 
@@ -321,8 +259,6 @@ The system is pre-configured for inventory management databases with tables:
 - **stock_movements**: Inbound/outbound history
 - **delivery_notes**: Delivery documents
 - **invoices**: Issued invoices
-- **customers**: Customer accounts
-- **suppliers**: Supplier information
 - **vehicles**: Vehicle data
 
 #### Adapting to Your Schema
@@ -402,79 +338,158 @@ curl -X POST "http://localhost:8000/predict" \
 ## Project Structure
 
 ```
-minimal-token-db-api/
-│
-├── app/                          # Main source code
-│   ├── __init__.py
-│   ├── main.py                   # FastAPI entry point
-│   │
-│   ├── db/                       # Database management
-│   │   ├── __init__.py
-│   │   └── database.py           # Connection and query execution
-│   │
-│   ├── prompt/                   # LLM prompt configuration
-│   │   ├── __init__.py
-│   │   ├── prompt.py             # Templates for SQL and NLP agents
-│   │   └── table_info.py         # Database schema documentation
-│   │
-│   ├── schemas/                  # Pydantic data models
-│   │   ├── __init__.py
-│   │   └── question.py           # Request/response validation
-│   │
-│   └── services/                 # Business logic
-│       ├── __init__.py
-│       ├── chat.py               # Conversation memory management
-│       └── factories.py          # Agent initialization
-│
-├── .gitignore                    # Git ignore file
-├── Dockerfile                    # Docker configuration
-├── docker-compose.yml            # Container orchestration
-├── requirements.txt              # Python dependencies
-└── README.md                     # This documentation
+app/
+├── db/              # Database connection & query execution
+├── prompt/          # AI prompts & schema definitions
+├── schemas/         # Request/response models
+├── services/        # AI providers, memory, agent factory
+└── tasks/           # Background jobs & scheduler
 ```
 
 ### Key Modules Description
 
-#### `app/main.py`
+### 1. AI Agents (`app/services/`)
 
-FastAPI application entry point. Contains:
-- CORS configuration
-- Endpoint definitions
-- Global error handling
-- Swagger/ReDoc documentation
+#### SQL Agent
+- **Purpose:** Convert natural language → MySQL queries
+- **Temperature:** 0.1 (deterministic)
+- **Rules:** MySQL-only syntax, automatic LIMIT enforcement, table alias requirement
 
-#### `app/db/database.py`
+#### NLP Agent
+- **Purpose:** Convert SQL results → Natural French responses
+- **Temperature:** 0.3 (natural variation)
+- **Rules:** Never mention technical terms (SQL, database), conversational tone, concise (2-3 sentences)
 
-Database connection management:
-- MySQL connection pool
-- Secure SQL query execution
-- Transaction handling
-- Result set conversion
+### 2. Chat Memory (`app/services/chat.py`)
 
-#### `app/prompt/prompt.py`
+```python
+memory = ChatMemory()
 
-LLM prompt templates:
-- SQL agent prompt (query generation)
-- NLP agent prompt (response formatting)
-- System instructions and context
-- **Token optimization strategies**
+# Session management
+memory.add_user_message(session_id, question)
+memory.add_ai_message(session_id, response)
 
-#### `app/services/chat.py`
+# Keep last 3 Q&A pairs
+memory.rotate_history(session_id, max_questions=3)
 
-Conversation memory management:
-- Per-session history storage
-- Automatic pruning (last 3 exchanges only)
-- Context for follow-up questions
-- Memory cleanup
-- **Token-efficient history management**
+# Cleanup
+memory.clear_history_by_id(session_id)
+memory.clear_all_sessions()
+```
 
-#### `app/services/factories.py`
+### 3. Database Layer (`app/db/database.py`)
 
-Component initialization:
-- LLM agent creation
-- Model configuration
-- Dependency injection
-- **Provider-agnostic setup**
+**Key Functions:**
+- `create_engine_for_sql_database()` - SQLAlchemy engine with pooling
+- `verify_and_extract_sql_query()` - Validate and enforce LIMIT
+- `execute_queries()` - Execute and return structured results
+- `is_empty_result()` - Check for empty query results
+
+### 4. Agent Factory (`app/services/factories.py`)
+
+```python
+agent = init_ai_agent(
+    model_config={"temperature": 0.1, "max_retries": 2},
+    engine=database_engine,
+    prompt_settings=prompt_template
+)
+```
+
+## Customization
+
+### Adding New AI Provider
+
+Edit `app/services/ai_providers.py`:
+
+```python
+PROVIDERS = {
+    "your_provider": {
+        "class": YourProviderClass,
+        "key": "YOUR_API_KEY_ENV_VAR"  # or None for local
+    }
+}
+```
+
+### Modifying Database Schema
+
+Edit `app/prompt/table_info.py`:
+
+```python
+table_info = {
+    "your_table": {
+        "description": "Table purpose",
+        "columns": {
+            "id": "Column description",
+            # ... more columns
+        }
+    }
+}
+```
+
+### Customizing Prompts
+
+Edit `app/prompt/prompt.py`:
+
+**SQL Agent:** Modify `sql_prompt` for query generation rules  
+**NLP Agent:** Modify `nlp_prompt` for response formatting
+
+---
+
+## Background Jobs
+
+### Scheduler (`app/tasks/scheduler.py`)
+
+Automatic tasks using APScheduler:
+
+1. **Memory Cleanup** - Every 1 minute
+   - Resets inactive sessions (default: 10 min timeout)
+   
+2. **LLM Reset** - Daily at 00:00 and 12:00
+   - Reinitializes agents to prevent degradation
+
+### Manual Triggers (`app/tasks/jobs.py`)
+
+```python
+# Reset all memory
+reset_agents_memory(app)
+
+# Reset specific session
+reset_memory_user(app, session_id)
+
+# Check inactive sessions
+check_last_request_per_user(app, timeout_seconds)
+
+# Reset LLM agents
+reset_llm(app)
+```
+
+---
+
+## Error Handling
+
+| Error Type | Handling |
+|------------|----------|
+| Invalid SQL | Returns empty result, NLP explains gracefully |
+| DB Connection | NLP agent provides user-friendly error message |
+| Empty Results | Returns "no matching item" to NLP agent |
+| Critical Failure | 500 error with generic message |
+
+---
+
+## Memory Management
+
+### Session History
+- Each session maintains independent conversation history
+- Automatic rotation: keeps last 3 Q&A pairs (6 messages total)
+- Prevents context overflow in long conversations
+
+### Cleanup Strategy
+- **Timeout-based:** Inactive sessions cleared after configurable period
+- **Scheduled:** Full reset at midnight and noon
+- **Manual:** On-demand via API shutdown or manual trigger
+
+---
+
 
 ## 🔌 API Endpoints
 
