@@ -23,7 +23,7 @@ Total: ~10,300+ tokens per query.
 
 ### Solution: Token-Optimized Architecture
 
-**Minimal Token DB API** dramatically reduces token consumption through intelligent design:
+**Minimal Token DB API** dramatically reduces token consumption :
 
 ```
 Minimal Token Approach:
@@ -48,7 +48,7 @@ Total: ~1,160 tokens per query.
 
 2. **Conversation Memory Optimization**
    - Maintains only the last 3 Q&A pairs per session(You can change it easily)
-   - Automatically prunes old context(You can desactive it)
+   - Automatically prunes old context(You can desactive it or change it)
    - Smart relevance-based history selection
 
 3. **Result Compression**
@@ -61,7 +61,7 @@ Total: ~1,160 tokens per query.
    - Each llm receives only what it needs
    - No redundant context passing
 
-### Universal API Compatibility
+### Universal API and AI Prodiver Compatibility
 
 Built with **LangChain's native framework**, this architecture works with:
 
@@ -71,8 +71,9 @@ Built with **LangChain's native framework**, this architecture works with:
 - **Google** (Gemini, PaLM)
 - **AWS Bedrock** (Titan, Claude)
 - **HuggingFace Models**
+- **Ollama**
 
-**Simply change the API key and model name**
+**Simply change the API key if needed, model name and provider name**
 
 ## 🏗 Architecture
 
