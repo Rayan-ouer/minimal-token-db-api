@@ -1,8 +1,6 @@
 import os
-from langchain_groq import ChatGroq
-from app.services.chat import IAModel
+from app.services.agent import IAModel
 from langchain_core.prompts import BasePromptTemplate
-from sqlalchemy.engine import Engine
 from app.services.ai_providers import PROVIDERS
 
 
@@ -13,7 +11,10 @@ def filter_none_values(data: dict) -> dict:
             cleaned[key] = value
     return cleaned
 
-def init_ai_agent(model_config, engine=None, prompt_settings: BasePromptTemplate = None) -> IAModel:
+
+def init_ai_agent(
+    model_config, engine=None, prompt_settings: BasePromptTemplate = None
+) -> IAModel:
     provider_name = os.getenv("AI_PROVIDER", "").lower()
     model_name = os.getenv("AI_MODEL")
 

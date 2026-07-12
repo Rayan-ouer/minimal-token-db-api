@@ -6,6 +6,7 @@ from app.prompt.prompt import sql_prompt, nlp_prompt, init_prompt
 from app.prompt.table_info import table_info
 from app.services.factories import init_ai_agent
 
+
 def reset_agents_memory(app) -> None:
     try:
         if hasattr(app.state, "sql_agent"):
@@ -15,6 +16,7 @@ def reset_agents_memory(app) -> None:
         logging.info("Agents memory reset successfully.")
     except Exception as e:
         logging.error(f"Error resetting agents memory: {e}")
+
 
 def reset_memory_user(app, session_id: int) -> None:
     logging.info(f"Resetting memory for user: {session_id}...")
@@ -32,7 +34,9 @@ def check_last_request_per_user(app, timeout_seconds: Optional[int] = None) -> N
     try:
         current_time = int(time.time())
         default_timeout = int(os.getenv("MEMORY_TIMEOUT_SECONDS", str(10 * 60)))
-        timeout_threshold = timeout_seconds if timeout_seconds is not None else default_timeout
+        timeout_threshold = (
+            timeout_seconds if timeout_seconds is not None else default_timeout
+        )
 
         last_map = getattr(app.state, "last_request_per_user", {})
         for session_id, last_request_time in list(last_map.items()):
@@ -48,19 +52,24 @@ def check_last_request_per_user(app, timeout_seconds: Optional[int] = None) -> N
     except Exception as e:
         logging.error(f"Error checking last request per user: {e}")
 
+
 def reset_llm(app):
     try:
         engine = app.state.sql_agent._engine
         app.state.sql_agent = init_ai_agent(
-            model_config={"temperature": 0.1, "max_retries": 2}, 
+            model_config={"temperature": 0.1, "max_retries": 2},
             engine=engine,
-            prompt_settings=init_prompt([("system", sql_prompt)], table_info=table_info))
+            prompt_settings=init_prompt(
+                [("system", sql_prompt)], table_info=table_info
+            ),
+        )
 
         app.state.nlp_agent = init_ai_agent(
             model_config={"temperature": 0.3, "max_retries": 2},
-            prompt_settings=init_prompt([("system", nlp_prompt)],)
+            prompt_settings=init_prompt(
+                [("system", nlp_prompt)],
+            ),
         )
         logging.info("LLM agent has been reset.")
     except Exception as e:
         logging.error(f"Failed to reset LLM agent: {e}")
-

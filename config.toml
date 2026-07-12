@@ -1,0 +1,16 @@
+[[pipeline]]
+[[pipeline.agent]]
+name = "gpt-5-mini"
+temperature = 0.1
+modules = ["database", "memory", "network"]
+
+[[pipeline]]
+[[pipeline.agent]]
+name = "llama-3.3-70b-versatile"
+temperature = 0.1
+modules = ["network"]
+
+[[pipeline.agent]]
+name = "gpt-4.1-mini"
+temperature = 0.2
+modules = ["memory"]
