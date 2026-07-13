@@ -6,51 +6,6 @@ from urllib.parse import quote_plus
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine, CursorResult
 
-
-def create_engine_for_sql_database(connection_string: str) -> Engine:
-    username = quote_plus(os.getenv("AI_USERNAME"))
-    password = quote_plus(os.getenv("AI_PASSWORD"))
-    host = os.getenv("DB_HOST")
-    port = os.getenv("DB_PORT")
-    database = os.getenv("DB_DATABASE")
-    url = f"{connection_string}//{username}:{password}@{host}:{port}/{database}"
-    engine = create_engine(
-        url,
-        pool_pre_ping=True,
-        pool_recycle=28800,
-        echo=False,
-    )
-    return engine
-
-
-def add_limit_select(query: str, max_limit: Optional[int]) -> str:
-    if max_limit is None:
-        return query.strip().rstrip(";") + ";"
-    query = re.sub(r";\s*$", "", query)
-    limit_match = re.search(r"\bLIMIT\s+(\d+)", query, re.IGNORECASE)
-    if limit_match:
-        existing_limit = int(limit_match.group(1))
-        if existing_limit > max_limit:
-            query = re.sub(
-                r"\bLIMIT\s+\d+", f"LIMIT {max_limit}", query, flags=re.IGNORECASE
-            )
-    else:
-        query += f" LIMIT {max_limit}"
-    return query.strip() + ";"
-
-
-def verify_and_extract_sql_query(
-    query: str, max_limit: Optional[int]
-) -> Optional[list[str]]:
-    query: str = sqlparse.format(query, reindent=True, keyword_case="upper")
-    clean_query: str = get_element_str(query, "SELECT", ";")
-
-    if not clean_query:
-        return None
-    queries = clean_query.split(";")
-    return [add_limit_select(q.strip(), max_limit) for q in queries if q.strip()]
-
-
 def extract_content(result: CursorResult) -> list[dict[str, Any]]:
     try:
         rows = result.fetchall()

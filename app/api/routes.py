@@ -3,7 +3,6 @@ from app.schemas.question import Question
 
 agent_rooter: APIRouter = APIRouter()
 
-
 @agent_rooter.get("/")
 def read_root():
     return {

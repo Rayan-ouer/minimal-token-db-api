@@ -1,30 +1,21 @@
 from langchain_core.prompts import BasePromptTemplate
 from typing import Optional, Dict, Any
+from app.modules.module import Module
 from langchain_core.language_models import BaseLanguageModel
 from langchain_core.messages import AIMessage
 
 
-class IAModel:
-    def __init__(self):
-        self._model: Optional[BaseLanguageModel] = None
-        self._prompt: Optional[BasePromptTemplate] = None
-        self._engine = None
-        self._memory = ChatMemory()
-
+class Agent:
+    def __init__(self, model: BaseLanguageModel, prompt: BasePromptTemplate, modules: list[Module] = None):
+        self._model: Optional[BaseLanguageModel] = model
+        self._prompt: Optional[BasePromptTemplate] = prompt
+        self._modules: list[Module] = modules
+        
     def set_model(self, model: BaseLanguageModel):
         self._model = model
 
     def set_prompt(self, prompt: BasePromptTemplate):
         self._prompt = prompt
-
-    def set_engine(self, engine):
-        self._engine = engine
-
-    def get_engine(self):
-        return self._engine
-
-    def get_memory(self):
-        return self._memory
 
     def get_response(self, variables: Dict[str, Any]):
         if not self._model or not self._prompt:

@@ -1,6 +1,9 @@
 import os
-from app.services.agent import IAModel
+import toml
+from langgraph.graph import StateGraph
 from langchain_core.prompts import BasePromptTemplate
+
+from app.services.agent import Agent
 from app.services.ai_providers import PROVIDERS
 
 
@@ -12,9 +15,7 @@ def filter_none_values(data: dict) -> dict:
     return cleaned
 
 
-def init_ai_agent(
-    model_config, engine=None, prompt_settings: BasePromptTemplate = None
-) -> IAModel:
+def init_ai_agent(prompt_settings: BasePromptTemplate = None) -> Agent:
     provider_name = os.getenv("AI_PROVIDER", "").lower()
     model_name = os.getenv("AI_MODEL")
 
@@ -46,3 +47,17 @@ def init_ai_agent(
     agent.set_prompt(prompt_settings)
 
     return agent
+
+class AgentFactory:
+    def __init__(self):
+        pass
+
+    def create_workflows(self, file: str) -> StateGraph:
+        config: dict = toml.load(file)["pipeline"]
+
+        for pipeline in config:
+            agent = pipeline["pipeline.agent"]
+            for agent in pipeline:
+                name: str = agent["name"]
+                provider: str = agent["provider"]
+                

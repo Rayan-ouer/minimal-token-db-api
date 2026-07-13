@@ -49,7 +49,7 @@ Translate business questions into SQL conditions using the dataset context:
 
 ### INPUT:
 
-Database schema: {table_info}
+Database schema: {schema}
 
 ### RESPONSE:
 
