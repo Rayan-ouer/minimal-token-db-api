@@ -1,15 +1,16 @@
 [[pipeline]]
 [[pipeline.agent]]
 name = "gpt-5-mini"
-provider = "openai"
 temperature = 0.1
-prompt = "sql_prompt"
-modules = ["database", "memory"]
+modules = ["database", "memory", "network"]
 
 [[pipeline]]
 [[pipeline.agent]]
 name = "llama-3.3-70b-versatile"
-provider = "groq"
 temperature = 0.1
-prompt = "nlp_prompt"
 modules = ["network"]
+
+[[pipeline.agent]]
+name = "gpt-4.1-mini"
+temperature = 0.2
+modules = ["memory"]
