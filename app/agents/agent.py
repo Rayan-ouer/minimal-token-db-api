@@ -1,4 +1,5 @@
 from typing import Optional, Dict, Any
+from langgraph.runtime import Runtime
 from langchain_core.messages import AIMessage
 from langchain_core.prompts import BasePromptTemplate
 from langchain_core.language_models import BaseLanguageModel
@@ -25,7 +26,7 @@ class Agent:
     def set_prompt(self, prompt: BasePromptTemplate):
         self._prompt = prompt
 
-    def get_response(self, variables: Dict[str, Any]):
+    def get_response(self, variables: Dict[str, Any]) -> AIMessage:
         if not self._model or not self._prompt:
             raise RuntimeError(
                 "The template and prompt must be defined before generating a response."
@@ -60,6 +61,15 @@ class Agent:
 
         return result
 
-    def run(state: State, context: Context):
-        
-        pass
+    def run(self, state: State, runtime: Runtime[Context]):
+        variables = {
+            "input": state["input"],
+            "output": state["output"],
+            "tools_output": state["tools_output"],
+        }
+        response: AIMessage = self.get_response(variables)
+        state["output"] = response.content
+
+        for module in self._modules:
+            module.run(state=state, context=runtime.context)
+        return state

@@ -5,8 +5,6 @@ from app.schemas.agent_data import AgentData
 
 from app.agents.agent import Agent
 from app.agents.factory import AgentFactory
-from app.prompt import PROMPTS
-from app.prompt.prompts import init_prompt
 
 
 class AgentRegistry:
@@ -33,7 +31,7 @@ class AgentRegistry:
                     agent["model"],
                     agent["provider"],
                     agent["settings"],
-                    init_prompt(PROMPTS[agent["prompt"]]),
+                    agent["prompt"],
                     AgentFactory().get_modules(agent["modules"]),
                 )
                 self.set_agent(agent["name"], AgentFactory().create_agent(data))

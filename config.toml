@@ -11,7 +11,7 @@ modules = ["database", "memory"]
 [[pipeline.agents]]
 name = "explainer"
 model = "gpt-5-mini"
-provider = "groq"
+provider = "openai"
 settings = { temperature = 0.1, max_retries = 2 }
 prompt = "nlp_prompt"
 modules = ["memory"]
@@ -19,7 +19,7 @@ modules = ["memory"]
 [[pipeline.agents]]
 name = "exception"
 model = "gpt-5-mini"
-provider = "groq"
+provider = "openai"
 settings = { temperature = 0.1, max_retries = 2 }
 prompt = "nlp_prompt"
 modules = ["memory"]
@@ -35,5 +35,5 @@ type = "conditional"
 router = "redirection"
 
 [edge.routes]
-success = "explainer"
-error = "exception"
+explainer = "explainer"
+exception = "exception"

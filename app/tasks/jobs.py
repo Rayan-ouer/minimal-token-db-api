@@ -2,7 +2,7 @@ import time
 import os
 import logging
 from typing import Optional
-from app.prompt.prompts import sql_prompt, nlp_prompt, init_prompt
+from app.prompt.prompts import sql_prompt, nlp_prompt, create_prompt
 from app.prompt.table_info import table_info
 from app.services.factories import init_ai_agent
 
@@ -59,14 +59,14 @@ def reset_llm(app):
         app.state.sql_agent = init_ai_agent(
             model_config={"temperature": 0.1, "max_retries": 2},
             engine=engine,
-            prompt_settings=init_prompt(
+            prompt_settings=create_prompt(
                 [("system", sql_prompt)], table_info=table_info
             ),
         )
 
         app.state.nlp_agent = init_ai_agent(
             model_config={"temperature": 0.3, "max_retries": 2},
-            prompt_settings=init_prompt(
+            prompt_settings=create_prompt(
                 [("system", nlp_prompt)],
             ),
         )

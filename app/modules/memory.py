@@ -1,4 +1,6 @@
 from app.modules.module import Module
+from app.schemas.state import State
+from app.schemas.context import Context
 from langchain_core.chat_history import InMemoryChatMessageHistory
 
 
@@ -56,3 +58,9 @@ class Memory(Module):
             messages_to_keep = history.messages[-max_messages:]
             history.messages = messages_to_keep
             self._counter_question[session_id] = max_questions
+    
+    def get_context(self) -> dict[str, str]:
+        return {"conversation": self._conversation}
+
+    def run(self, state: State, context: Context):
+        state["messages"].get(context["uuid"], context["uuid"]).add_user_message(state["input"])

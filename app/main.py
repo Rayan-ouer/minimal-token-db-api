@@ -10,7 +10,6 @@ from app.agents.register import AgentRegistry
 from app.workflows.workflows import Workflows
 from app.api.routes import agent_rooter
 
-
 load_dotenv()
 
 logging.basicConfig(
@@ -18,6 +17,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

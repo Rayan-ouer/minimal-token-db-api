@@ -1,13 +1,15 @@
 from langchain_core.prompts import ChatPromptTemplate
 
 
-def init_prompt(messages: list[tuple[str, str]], **kwargs) -> ChatPromptTemplate:
-    prompt_template = ChatPromptTemplate.from_messages(messages)
+def create_prompt(system_prompt: str, **kwargs) -> ChatPromptTemplate:
 
+    prompt = ChatPromptTemplate.from_messages(
+        [("system", system_prompt), ("human", "{input}")]
+    )
     if kwargs:
-        return prompt_template.partial(**kwargs)
-    else:
-        return prompt_template
+        prompt = prompt.partial(**kwargs)
+
+    return prompt
 
 
 sql_prompt: str = """
@@ -46,6 +48,10 @@ Translate business questions into SQL conditions using the dataset context:
 * "recent years" → filter on latest available dates (ORDER BY date DESC)
 * "electric models" → filter on fuel type or category if available
 * "SUV / Sedan / etc." → filter on vehicle category if available
+
+### Input:
+
+Database schema: {database_schema}
 
 """
 
@@ -96,6 +102,10 @@ BON: "La région X affiche les meilleures performances..."
 ### CONTEXTE SYSTÈME:
 
 * Si le nombre de résultats atteint cette limite, préciser qu'il s'agit d'un échantillon des données disponibles
+
+### Input:
+
+Données: {tools_output}
 
 ### Output (réponse en français, ton professionnel et naturel):
 
