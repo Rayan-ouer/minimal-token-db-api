@@ -9,8 +9,8 @@ from sqlalchemy.engine import Engine
 from sqlalchemy import create_engine
 
 
-from module import Module
-from app.utils import extract_between
+from app.modules import Module
+from app.utils.strings import extract_between
 
 
 class Database(Module):
@@ -36,7 +36,7 @@ class Database(Module):
             f"{os.getenv('DB_PORT')}/"
             f"{os.getenv('DATABASE')}"
         )
-    
+
     def set_limit(self, query: str, max_limit: Optional[int]) -> str:
         if not max_limit:
             return query.strip().rstrip(";") + ";"
@@ -51,8 +51,10 @@ class Database(Module):
         else:
             query += f" LIMIT {max_limit}"
         return query.strip() + ";"
-    
-    def extract_sql_query(self, query: str, max_limit: Optional[int]) -> Optional[list[str]]:
+
+    def extract_sql_query(
+        self, query: str, max_limit: Optional[int]
+    ) -> Optional[list[str]]:
         query: str = sqlparse.format(query, reindent=True, keyword_case="upper")
         clean_query: str = extract_between(query, "SELECT", ";")
 
@@ -60,7 +62,6 @@ class Database(Module):
             return None
         queries = clean_query.split(";")
         return [self.set_limit(q.strip(), max_limit) for q in queries if q.strip()]
-
 
     def introspect_schema(self) -> dict[str, Any]:
         inspector = inspect(self._engine)
@@ -75,7 +76,6 @@ class Database(Module):
                 },
             }
         return schema
-    
+
     def run(self):
         return super().run()
-

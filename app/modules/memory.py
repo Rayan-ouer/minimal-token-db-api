@@ -1,7 +1,8 @@
+from app.modules.module import Module
 from langchain_core.chat_history import InMemoryChatMessageHistory
 
 
-class Memory:
+class Memory(Module):
     def __init__(self):
         self._conversation: dict[int, InMemoryChatMessageHistory] = {}
         self._counter_question: dict[int, int] = {}

@@ -6,11 +6,16 @@ from langchain_core.messages import AIMessage
 
 
 class Agent:
-    def __init__(self, model: BaseLanguageModel, prompt: BasePromptTemplate, modules: list[Module] = None):
+    def __init__(
+        self,
+        model: BaseLanguageModel,
+        prompt: BasePromptTemplate,
+        modules: list[Module] = None,
+    ):
         self._model: Optional[BaseLanguageModel] = model
         self._prompt: Optional[BasePromptTemplate] = prompt
         self._modules: list[Module] = modules
-        
+
     def set_model(self, model: BaseLanguageModel):
         self._model = model
 
@@ -35,7 +40,7 @@ class Agent:
         **invoke_kwargs,
     ) -> AIMessage:
 
-        if user_question is not None and add_to_history:
+        if user_question and add_to_history:
             self._memory.add_user_message(session_id, user_question)
 
         history = self._memory.get_session_by_id(session_id)

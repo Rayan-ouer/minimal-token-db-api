@@ -1,15 +1,34 @@
 [[pipeline]]
-[[pipeline.agent]]
-name = "gpt-5-mini"
+[[pipeline.agents]]
+name = "generator"
+model = "gpt-5-mini"
 provider = "openai"
-temperature = 0.1
+settings = { temperature = 0.1, max_retries = 2 }
 prompt = "sql_prompt"
 modules = ["database", "memory"]
 
 [[pipeline]]
-[[pipeline.agent]]
-name = "llama-3.3-70b-versatile"
+[[pipeline.agents]]
+name = "explainer"
+model = "gpt-5-mini"
 provider = "groq"
-temperature = 0.1
+settings = { temperature = 0.1, max_retries = 2 }
 prompt = "nlp_prompt"
-modules = ["network"]
+modules = ["memory"]
+
+[[pipeline.agents]]
+name = "exception"
+model = "gpt-5-mini"
+provider = "groq"
+settings = { temperature = 0.1, max_retries = 2 }
+prompt = "nlp_prompt"
+modules = ["memory"]
+
+[[edge]]
+source = "generator"
+function = "redirection"
+
+[[edge]]
+source = "generator"
+dest = "explainer"
+dest = "explainer"

@@ -1,6 +1,7 @@
-from typing_extensions import TypedDict
+from typing_extensions import TypedDict, Any
+
 
 class State(TypedDict):
     input: str
-    decision: str
     output: str
+    tools_output: Any

@@ -6,6 +6,7 @@ from urllib.parse import quote_plus
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine, CursorResult
 
+
 def extract_content(result: CursorResult) -> list[dict[str, Any]]:
     try:
         rows = result.fetchall()

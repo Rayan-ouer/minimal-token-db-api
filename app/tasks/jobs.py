@@ -2,7 +2,7 @@ import time
 import os
 import logging
 from typing import Optional
-from app.prompt.prompt import sql_prompt, nlp_prompt, init_prompt
+from app.prompt.prompts import sql_prompt, nlp_prompt, init_prompt
 from app.prompt.table_info import table_info
 from app.services.factories import init_ai_agent
 

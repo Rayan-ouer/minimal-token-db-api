@@ -10,7 +10,7 @@ def init_prompt(messages: list[tuple[str, str]], **kwargs) -> ChatPromptTemplate
         return prompt_template
 
 
-sql_prompt = """
+sql_prompt: str = """
 
 ### Instructions:
 
@@ -47,15 +47,9 @@ Translate business questions into SQL conditions using the dataset context:
 * "electric models" → filter on fuel type or category if available
 * "SUV / Sedan / etc." → filter on vehicle category if available
 
-### INPUT:
-
-Database schema: {schema}
-
-### RESPONSE:
-
 """
 
-nlp_prompt = """
+nlp_prompt: str = """
 ### Instructions:
 
 Vous êtes un assistant intelligent spécialisé dans l’analyse des ventes automobiles BMW à l’échelle mondiale. Votre rôle est de communiquer les informations de manière claire et professionnelle, comme un expert métier qui parle à un responsable commercial ou stratégique.
@@ -101,13 +95,7 @@ BON: "La région X affiche les meilleures performances..."
 
 ### CONTEXTE SYSTÈME:
 
-* Limite de résultats par requête: {result_limit}
 * Si le nombre de résultats atteint cette limite, préciser qu'il s'agit d'un échantillon des données disponibles
-
-### Input:
-
-Requête de l’agent IA précédent: {query}
-Données système: {data}
 
 ### Output (réponse en français, ton professionnel et naturel):
 
