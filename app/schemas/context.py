@@ -1,6 +1,6 @@
-from typing_extensions import TypedDict, Any
+from typing_extensions import TypedDict
 
 
 class Context(TypedDict):
     uuid: str
-    db_conn: str
+    max_result: int

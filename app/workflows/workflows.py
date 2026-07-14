@@ -1,10 +1,10 @@
 import sys
 import toml
 from langgraph.graph import StateGraph
+from langgraph.graph.state import CompiledStateGraph
 
 from app.schemas.state import State
 from app.schemas.context import Context
-from app.agents.factory import AgentFactory
 from app.agents.register import AgentRegistry
 from app.workflows import EDGE_TYPES
 from app.workflows.edges import Edge
@@ -12,6 +12,7 @@ from app.workflows.edges import Edge
 
 class Workflows:
     _workflows: StateGraph
+    graph: CompiledStateGraph
     _config: str
 
     def __init__(self, config: str):
@@ -19,6 +20,9 @@ class Workflows:
         self._workflows: StateGraph = StateGraph(
             state_schema=State, context_schema=Context
         )
+
+    def get_graph(self):
+        return self.graph
 
     def create(self, register: AgentRegistry):
         for name, agent in register.get_register().items():
@@ -32,4 +36,4 @@ class Workflows:
         for edge_config in self._config:
             edge: Edge = EDGE_TYPES[edge_config.get("type", "normal")](edge_config)
             edge.build(self._workflows)
-        return self._workflows.compile()
+        self.graph = self._workflows.compile()

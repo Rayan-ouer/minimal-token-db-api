@@ -2,7 +2,6 @@ import os
 import logging
 from dotenv import load_dotenv
 
-from IPython.display import display, Image
 
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
@@ -20,14 +19,15 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logging.info("Startup...")
     register: AgentRegistry = AgentRegistry(os.getenv("CONFIGURATION"))
     workflows: Workflows = Workflows(os.getenv("CONFIGURATION"))
-    chat_graph = workflows.create(register)
-    print(chat_graph.get_graph().draw_ascii())
+    workflows.create(register)
+    app.state.graph = workflows.get_graph()
+    app.state.registry = register
+    print(app.state.graph.get_graph().draw_ascii())
     yield
     logging.info("Shutting down...")
     # when shutting down

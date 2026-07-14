@@ -21,7 +21,6 @@ class Database(Module):
             pool_recycle=28800,
             echo=False,
         )
-        self.introspect_schema()
 
     def get_engine(self) -> Engine:
         return self._engine
@@ -76,6 +75,9 @@ class Database(Module):
                 },
             }
         return schema
+    
+    def get_context(self) -> str:
+        return self.introspect_schema()
 
     def run(self):
         return super().run()

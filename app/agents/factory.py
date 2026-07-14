@@ -1,8 +1,6 @@
 import os
 
 from app.agents.agent import Agent
-from app.prompt import PROMPTS
-from app.prompt.prompts import init_prompt
 from app.schemas.agent_data import AgentData
 from app.modules import MODULES, Module
 from app.agents.ai_providers import PROVIDERS
@@ -31,23 +29,23 @@ class AgentFactory:
 
     @staticmethod
     def create_agent(agentdata: AgentData) -> Agent:
-        if agentdata.provider not in PROVIDERS:
-            raise ValueError(
+        try:
+            config = PROVIDERS[agentdata.provider]
+        except:
+             raise ValueError(
                 f"Unknown AI provider, You can add provider in ai_providers.py '{agentdata.provider}'. "
                 f"Valid providers are: {', '.join(PROVIDERS.keys())}"
             )
-
-        config = PROVIDERS[agentdata.provider]
         provider_class = config["class"]
         key_name = config["key"]
-
         api_key = os.getenv(key_name) if key_name else None
         if key_name and not api_key:
             raise RuntimeError(
                 f"Missing API key for provider '{agentdata.provider}'. "
                 f"Expected environment variable '{key_name}', but it was not found."
             )
-
+        for module in agentdata.modules:
+            agentdata.prompt += module.get_context()
         model_args = {"model": agentdata.model, **agentdata.settings}
         if api_key:
             model_args["api_key"] = api_key

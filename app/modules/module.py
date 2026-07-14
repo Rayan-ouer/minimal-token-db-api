@@ -7,3 +7,7 @@ class Module(ABC):
     @abstractmethod
     def run(self) -> None:
         pass
+
+    @abstractmethod
+    def get_context(self) -> str:
+        pass
