@@ -1,8 +1,11 @@
-from langchain_core.prompts import BasePromptTemplate
 from typing import Optional, Dict, Any
-from app.modules.module import Module
-from langchain_core.language_models import BaseLanguageModel
 from langchain_core.messages import AIMessage
+from langchain_core.prompts import BasePromptTemplate
+from langchain_core.language_models import BaseLanguageModel
+
+from app.schemas.state import State
+from app.schemas.context import Context
+from app.modules.module import Module
 
 
 class Agent:
@@ -56,3 +59,6 @@ class Agent:
             self._memory.add_ai_message(session_id, result.content)
 
         return result
+
+    def run(state: State, context: Context):
+        pass

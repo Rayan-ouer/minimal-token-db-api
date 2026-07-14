@@ -24,11 +24,16 @@ settings = { temperature = 0.1, max_retries = 2 }
 prompt = "nlp_prompt"
 modules = ["memory"]
 
+
 [[edge]]
-source = "generator"
-function = "redirection"
+source = "START"
+dest = "generator"
 
 [[edge]]
 source = "generator"
-dest = "explainer"
-dest = "explainer"
+type = "conditional"
+router = "redirection"
+
+[edge.routes]
+success = "explainer"
+error = "exception"

@@ -16,12 +16,13 @@ def filter_none_values(data: dict) -> dict:
             cleaned[key] = value
     return cleaned
 
+
 class AgentFactory:
     def __init__(self):
         pass
 
     @staticmethod
-    def get_modules(self, modules: list[str]) -> list[Module]:
+    def get_modules(modules: list[str]) -> list[Module]:
         mods: list[Module] = []
 
         for element in modules:
@@ -47,7 +48,7 @@ class AgentFactory:
                 f"Expected environment variable '{key_name}', but it was not found."
             )
 
-        model_args = {"model": model, **agentdata.settings}
+        model_args = {"model": agentdata.model, **agentdata.settings}
         if api_key:
             model_args["api_key"] = api_key
 
