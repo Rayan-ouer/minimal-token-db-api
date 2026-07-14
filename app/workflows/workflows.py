@@ -30,7 +30,6 @@ class Workflows:
             print(f"File error: {e}", file=sys.stderr)
             return None
         for edge_config in self._config:
-            print(f"{edge_config=}")
             edge: Edge = EDGE_TYPES[edge_config.get("type", "normal")](edge_config)
             edge.build(self._workflows)
         return self._workflows.compile()
