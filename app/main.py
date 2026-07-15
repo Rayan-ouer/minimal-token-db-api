@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Minimum tokens workflow engine",
+    title="efficient token workflow engine API",
     description="An API for building multi-agent AI workflows with optimized token usage.",
     version="0.1",
     lifespan=lifespan,

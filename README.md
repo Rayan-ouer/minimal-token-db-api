@@ -1,4 +1,4 @@
-# Minimal Token Database API
+# Efficient token workflow engine API
 
 Minimal Token Database API is a FastAPI service built around a LangGraph pipeline that turns natural-language questions into SQL, runs them against a MySQL-compatible database, and returns a plain-language answer with as little token usage as possible.
 
