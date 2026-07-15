@@ -1,0 +1,233 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minimal Token DB API - Request Flow</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #faf8f2;
+    --fg: #202633;
+    --muted: #5d6678;
+    --line: #637189;
+    --neutral: #e5e7eb;
+    --input: #c7e6ff;
+    --process: #d8d0ff;
+    --storage: #d8f3ea;
+    --external: #fde3a7;
+    --risk: #ffd2d2;
+    --surface: rgba(255, 255, 255, 0.76);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --fg: #e5e7eb;
+      --muted: #a3adbd;
+      --line: #93a4bd;
+      --neutral: #263244;
+      --input: #1d4ed8;
+      --process: #4338ca;
+      --storage: #0f766e;
+      --external: #92400e;
+      --risk: #991b1b;
+      --surface: rgba(15, 23, 42, 0.76);
+    }
+  }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(216, 208, 255, 0.25), transparent 24%),
+      radial-gradient(circle at 80% 20%, rgba(199, 230, 255, 0.28), transparent 26%),
+      var(--bg);
+    color: var(--fg);
+    font:
+      14px/1.4 ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+  main {
+    max-width: 1400px;
+    margin: 24px auto 40px;
+    padding: 0 20px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    padding: 18px 18px 10px;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(4px);
+  }
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 6px 14px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+    fill: var(--fg);
+  }
+  .label {
+    font-size: 14px;
+    font-weight: 650;
+    fill: var(--fg);
+  }
+  .small {
+    font-size: 12px;
+    fill: var(--muted);
+  }
+  .node {
+    stroke: var(--line);
+    stroke-width: 1.25;
+    rx: 18;
+    ry: 18;
+  }
+  .neutral {
+    fill: var(--neutral);
+  }
+  .input {
+    fill: var(--input);
+  }
+  .process {
+    fill: var(--process);
+  }
+  .storage {
+    fill: var(--storage);
+  }
+  .external {
+    fill: var(--external);
+  }
+  .risk {
+    fill: var(--risk);
+  }
+  .edge {
+    stroke: var(--line);
+    stroke-width: 1.7;
+    fill: none;
+    marker-end: url(#arrow);
+  }
+</style>
+<main>
+  <div class="card">
+    <div class="header">
+      <h1>POST /chat request flow</h1>
+      <div class="subtitle">What happens when a question reaches the API</div>
+    </div>
+    <svg viewBox="0 0 1380 700" role="img" aria-labelledby="title desc">
+      <title id="title">Minimal Token DB API request flow</title>
+      <desc id="desc">A question enters the chat endpoint, state is initialized, the LangGraph workflow runs the generator, database, and explainer nodes, and returns a concise French answer.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"></path>
+        </marker>
+      </defs>
+
+      <!-- connectors -->
+      <path class="edge" d="M214 180 L272 180"></path>
+      <path class="edge" d="M466 180 L530 180"></path>
+      <path class="edge" d="M714 180 L774 180"></path>
+      <path class="edge" d="M958 180 L1022 180"></path>
+      <path class="edge" d="M1144 180 L1208 180"></path>
+      <path class="edge" d="M1208 308 L1144 308"></path>
+      <path class="edge" d="M1022 308 L958 308"></path>
+      <path class="edge" d="M774 308 L714 308"></path>
+      <path class="edge" d="M530 308 L466 308"></path>
+      <path class="edge" d="M272 308 L214 308"></path>
+      <path class="edge" d="M962 432 L962 500"></path>
+      <path class="edge" d="M712 432 L712 500"></path>
+      <path class="edge" d="M462 432 L462 500"></path>
+
+      <!-- row 1 -->
+      <rect x="40" y="126" width="174" height="108" class="node input"></rect>
+      <text x="127" y="160" text-anchor="middle" class="label">Question payload</text>
+      <text x="127" y="184" text-anchor="middle" class="small">question + session_id</text>
+      <text x="127" y="202" text-anchor="middle" class="small">app/schemas/question.py</text>
+
+      <rect x="272" y="126" width="194" height="108" class="node process"></rect>
+      <text x="369" y="160" text-anchor="middle" class="label">POST /chat</text>
+      <text x="369" y="184" text-anchor="middle" class="small">FastAPI router</text>
+      <text x="369" y="202" text-anchor="middle" class="small">builds State + Context</text>
+
+      <rect x="530" y="126" width="184" height="108" class="node neutral"></rect>
+      <text x="622" y="160" text-anchor="middle" class="label">Initial state</text>
+      <text x="622" y="184" text-anchor="middle" class="small">input, output, decision</text>
+      <text x="622" y="202" text-anchor="middle" class="small">tools_output, messages</text>
+
+      <rect x="774" y="126" width="184" height="108" class="node process"></rect>
+      <text x="866" y="160" text-anchor="middle" class="label">Compiled graph</text>
+      <text x="866" y="184" text-anchor="middle" class="small">graph.ainvoke(state, context)</text>
+      <text x="866" y="202" text-anchor="middle" class="small">LangGraph runtime</text>
+
+      <rect x="1022" y="126" width="184" height="108" class="node process"></rect>
+      <text x="1114" y="160" text-anchor="middle" class="label">Generator</text>
+      <text x="1114" y="184" text-anchor="middle" class="small">LLM makes SQL</text>
+      <text x="1114" y="202" text-anchor="middle" class="small">model + SQL prompt</text>
+
+      <rect x="1208" y="126" width="132" height="108" class="node storage"></rect>
+      <text x="1274" y="160" text-anchor="middle" class="label">Database</text>
+      <text x="1274" y="184" text-anchor="middle" class="small">MySQL query</text>
+      <text x="1274" y="202" text-anchor="middle" class="small">result rows</text>
+
+      <!-- row 2 -->
+      <rect x="1022" y="274" width="184" height="108" class="node process"></rect>
+      <text x="1114" y="308" text-anchor="middle" class="label">Explainer</text>
+      <text x="1114" y="332" text-anchor="middle" class="small">French answer</text>
+      <text x="1114" y="350" text-anchor="middle" class="small">uses tools_output</text>
+
+      <rect x="774" y="274" width="184" height="108" class="node external"></rect>
+      <text x="866" y="308" text-anchor="middle" class="label">Provider check</text>
+      <text x="866" y="332" text-anchor="middle" class="small">OpenAI / Groq / Ollama</text>
+      <text x="866" y="350" text-anchor="middle" class="small">via env keys</text>
+
+      <rect x="530" y="274" width="184" height="108" class="node storage"></rect>
+      <text x="622" y="308" text-anchor="middle" class="label">Memory module</text>
+      <text x="622" y="332" text-anchor="middle" class="small">session history</text>
+      <text x="622" y="350" text-anchor="middle" class="small">clears / rotates</text>
+
+      <rect x="272" y="274" width="194" height="108" class="node risk"></rect>
+      <text x="369" y="308" text-anchor="middle" class="label">Decision branch</text>
+      <text x="369" y="332" text-anchor="middle" class="small">explainer or exception</text>
+      <text x="369" y="350" text-anchor="middle" class="small">based on graph state</text>
+
+      <rect x="40" y="274" width="174" height="108" class="node neutral"></rect>
+      <text x="127" y="308" text-anchor="middle" class="label">Response</text>
+      <text x="127" y="332" text-anchor="middle" class="small">returns final state</text>
+      <text x="127" y="350" text-anchor="middle" class="small">to the client</text>
+
+      <!-- row 3 background notes -->
+      <rect x="280" y="500" width="240" height="110" class="node neutral"></rect>
+      <text x="400" y="536" text-anchor="middle" class="label">Startup path</text>
+      <text x="400" y="560" text-anchor="middle" class="small">main.py loads config.toml</text>
+      <text x="400" y="578" text-anchor="middle" class="small">AgentRegistry + Workflows</text>
+
+      <rect x="600" y="500" width="240" height="110" class="node neutral"></rect>
+      <text x="720" y="536" text-anchor="middle" class="label">Database module</text>
+      <text x="720" y="560" text-anchor="middle" class="small">builds engine from DB_* vars</text>
+      <text x="720" y="578" text-anchor="middle" class="small">runs SQL and extracts rows</text>
+
+      <rect x="920" y="500" width="240" height="110" class="node neutral"></rect>
+      <text x="1040" y="536" text-anchor="middle" class="label">Scheduler</text>
+      <text x="1040" y="560" text-anchor="middle" class="small">memory timeout + LLM resets</text>
+      <text x="1040" y="578" text-anchor="middle" class="small">background maintenance</text>
+    </svg>
+  </div>
+</main>

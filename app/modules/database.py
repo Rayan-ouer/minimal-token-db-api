@@ -52,8 +52,7 @@ class Database(Module):
             query += f" LIMIT {max_limit}"
         return query.strip() + ";"
 
-    def extract_sql_query(
-        self, query: str, max_limit: int = 50) -> Optional[list[str]]:
+    def extract_sql_query(self, query: str, max_limit: int = 50) -> Optional[list[str]]:
         query: str = sqlparse.format(query, reindent=True, keyword_case="upper")
         clean_query: str = extract_between(query, "SELECT", ";")
 
@@ -108,7 +107,9 @@ class Database(Module):
         return {"database_schema": self.introspect_schema()}
 
     def run(self, state: State, context: Context):
-        queries: list[str] = self.extract_sql_query(state["output"], context["max_result"])
+        queries: list[str] = self.extract_sql_query(
+            state["output"], context["max_result"]
+        )
         print(f"{queries=}")
         results: list[str] = self.execute_queries(queries, context["max_result"])
         print(f"{results=}")
@@ -117,4 +118,3 @@ class Database(Module):
             return
         state["tools_output"].update({"database": results})
         state["decision"] = "explainer"
-

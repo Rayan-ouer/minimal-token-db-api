@@ -3,7 +3,6 @@ from app.schemas.state import State
 from app.schemas.context import Context
 
 
-
 class Module(ABC):
     """Interface for module."""
 

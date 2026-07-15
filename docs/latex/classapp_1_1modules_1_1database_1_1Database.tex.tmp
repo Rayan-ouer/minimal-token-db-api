@@ -1,0 +1,69 @@
+\doxysection{app.\+modules.\+database.\+Database Class Reference}
+\hypertarget{classapp_1_1modules_1_1database_1_1Database}{}\label{classapp_1_1modules_1_1database_1_1Database}\index{app.modules.database.Database@{app.modules.database.Database}}
+
+
+Inheritance diagram for app.\+modules.\+database.\+Database\+:
+% FIG 0
+
+
+Collaboration diagram for app.\+modules.\+database.\+Database\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a31059d581a08c57b8cb91609a0085a42}\label{classapp_1_1modules_1_1database_1_1Database_a31059d581a08c57b8cb91609a0085a42} 
+{\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self)
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a46519e3aae107b23829210b44316adb3}\label{classapp_1_1modules_1_1database_1_1Database_a46519e3aae107b23829210b44316adb3} 
+Engine {\bfseries get\+\_\+engine} (self)
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a992e6b4cd9bb2e484a22361c75e90c0e}\label{classapp_1_1modules_1_1database_1_1Database_a992e6b4cd9bb2e484a22361c75e90c0e} 
+str {\bfseries get\+\_\+database\+\_\+url} (self)
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a18325edeb179ddd9e4c3a7eee02c8d39}\label{classapp_1_1modules_1_1database_1_1Database_a18325edeb179ddd9e4c3a7eee02c8d39} 
+str {\bfseries set\+\_\+limit} (self, str query, Optional\mbox{[}int\mbox{]} max\+\_\+limit)
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a148960f610e278acc521782f6926af7b}\label{classapp_1_1modules_1_1database_1_1Database_a148960f610e278acc521782f6926af7b} 
+Optional\mbox{[}list\mbox{[}str\mbox{]}\mbox{]} {\bfseries extract\+\_\+sql\+\_\+query} (self, str query, int max\+\_\+limit=50)
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a43caa70ee0013b6b78f83cd5a9fe559b}\label{classapp_1_1modules_1_1database_1_1Database_a43caa70ee0013b6b78f83cd5a9fe559b} 
+dict\mbox{[}str, Any\mbox{]} {\bfseries introspect\+\_\+schema} (self)
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_abf797ea6f48f16d8202c0049a168085b}\label{classapp_1_1modules_1_1database_1_1Database_abf797ea6f48f16d8202c0049a168085b} 
+list\mbox{[}dict\mbox{[}str, Any\mbox{]}\mbox{]} {\bfseries extract\+\_\+content} (self, Cursor\+Result result, int limit)
+\item 
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a591c024fe15e84dccbd77ebb1d727ab9}\label{classapp_1_1modules_1_1database_1_1Database_a591c024fe15e84dccbd77ebb1d727ab9} 
+list\mbox{[}str\mbox{]} {\bfseries execute\+\_\+queries} (self, list\mbox{[}str\mbox{]} queries, int limit)
+\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{classapp_1_1modules_1_1database_1_1Database_a7424ae6a662a5c72c81e0ffeaeed9953}{get\+\_\+context}} (self)
+\item 
+\mbox{\hyperlink{classapp_1_1modules_1_1database_1_1Database_a130126d1f44567ff639b4da35ed5263f}{run}} (self, \mbox{\hyperlink{classapp_1_1schemas_1_1state_1_1State}{State}} state, \mbox{\hyperlink{classapp_1_1schemas_1_1context_1_1Context}{Context}} context)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a7424ae6a662a5c72c81e0ffeaeed9953}\label{classapp_1_1modules_1_1database_1_1Database_a7424ae6a662a5c72c81e0ffeaeed9953} 
+\index{app.modules.database.Database@{app.modules.database.Database}!get\_context@{get\_context}}
+\index{get\_context@{get\_context}!app.modules.database.Database@{app.modules.database.Database}}
+\doxysubsubsection{\texorpdfstring{get\_context()}{get\_context()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} app.\+modules.\+database.\+Database.\+get\+\_\+context (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Reimplemented from \mbox{\hyperlink{classapp_1_1modules_1_1module_1_1Module}{app.\+modules.\+module.\+Module}}.
+
+\Hypertarget{classapp_1_1modules_1_1database_1_1Database_a130126d1f44567ff639b4da35ed5263f}\label{classapp_1_1modules_1_1database_1_1Database_a130126d1f44567ff639b4da35ed5263f} 
+\index{app.modules.database.Database@{app.modules.database.Database}!run@{run}}
+\index{run@{run}!app.modules.database.Database@{app.modules.database.Database}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily app.\+modules.\+database.\+Database.\+run (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{\mbox{\hyperlink{classapp_1_1schemas_1_1state_1_1State}{State}}}]{state,  }\item[{\mbox{\hyperlink{classapp_1_1schemas_1_1context_1_1Context}{Context}}}]{context }\end{DoxyParamCaption})}
+
+
+
+Reimplemented from \mbox{\hyperlink{classapp_1_1modules_1_1module_1_1Module}{app.\+modules.\+module.\+Module}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+app/modules/database.\+py\end{DoxyCompactItemize}

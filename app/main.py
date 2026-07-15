@@ -30,12 +30,11 @@ async def lifespan(app: FastAPI):
     print(app.state.graph.get_graph().draw_ascii())
     yield
     logging.info("Shutting down...")
-    # when shutting down
 
 
 app = FastAPI(
-    title="minimum ai token consumption api",
-    description="An API that allows the AI ​​to consume as few tokens as possible.",
+    title="Minimum tokens workflow engine",
+    description="An API for building multi-agent AI workflows with optimized token usage.",
     version="0.1",
     lifespan=lifespan,
 )

@@ -1,0 +1,78 @@
+\doxysection{app.\+modules.\+memory.\+Memory Class Reference}
+\hypertarget{classapp_1_1modules_1_1memory_1_1Memory}{}\label{classapp_1_1modules_1_1memory_1_1Memory}\index{app.modules.memory.Memory@{app.modules.memory.Memory}}
+
+
+Inheritance diagram for app.\+modules.\+memory.\+Memory\+:
+% FIG 0
+
+
+Collaboration diagram for app.\+modules.\+memory.\+Memory\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a7e3335f22f727908b90d74529445e6b4}\label{classapp_1_1modules_1_1memory_1_1Memory_a7e3335f22f727908b90d74529445e6b4} 
+{\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a09b23c50ca1e45300b2d6f58b2adfd8f}\label{classapp_1_1modules_1_1memory_1_1Memory_a09b23c50ca1e45300b2d6f58b2adfd8f} 
+In\+Memory\+Chat\+Message\+History {\bfseries get\+\_\+session\+\_\+by\+\_\+id} (self, int session\+\_\+id)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_abfa88c5d67286b21e0120d7384cc59e2}\label{classapp_1_1modules_1_1memory_1_1Memory_abfa88c5d67286b21e0120d7384cc59e2} 
+{\bfseries clear\+\_\+history\+\_\+by\+\_\+id} (self, int session\+\_\+id)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a0d88f26e18571e30b6ba845da64164db}\label{classapp_1_1modules_1_1memory_1_1Memory_a0d88f26e18571e30b6ba845da64164db} 
+{\bfseries clear\+\_\+all\+\_\+sessions} (self)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a1885fccef102e4363114e84a03956531}\label{classapp_1_1modules_1_1memory_1_1Memory_a1885fccef102e4363114e84a03956531} 
+{\bfseries get\+\_\+session\+\_\+callable} (self, int session\+\_\+id)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a8b4bb963eb374aef294c2e598c71d3d2}\label{classapp_1_1modules_1_1memory_1_1Memory_a8b4bb963eb374aef294c2e598c71d3d2} 
+{\bfseries add\+\_\+user\+\_\+message} (self, int session\+\_\+id, user\+\_\+message)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_ac56712112785321f9389687421b155f8}\label{classapp_1_1modules_1_1memory_1_1Memory_ac56712112785321f9389687421b155f8} 
+{\bfseries add\+\_\+ai\+\_\+message} (self, int session\+\_\+id, ai\+\_\+message)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a577c6989bf1ac881c635c4cdf0a0b871}\label{classapp_1_1modules_1_1memory_1_1Memory_a577c6989bf1ac881c635c4cdf0a0b871} 
+{\bfseries reset\+\_\+history} (self, int session\+\_\+id, int max\+\_\+question)
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a0aab23ae3412a5491357ca1ce62844b1}\label{classapp_1_1modules_1_1memory_1_1Memory_a0aab23ae3412a5491357ca1ce62844b1} 
+{\bfseries rotate\+\_\+history} (self, int session\+\_\+id, int max\+\_\+questions)
+\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{classapp_1_1modules_1_1memory_1_1Memory_a16ab9914a0bc8b20d2ea0a93835fe9da}{get\+\_\+context}} (self)
+\item 
+\mbox{\hyperlink{classapp_1_1modules_1_1memory_1_1Memory_a5ae5e9166f660cce414bdd41464f2aba}{run}} (self, \mbox{\hyperlink{classapp_1_1schemas_1_1state_1_1State}{State}} state, \mbox{\hyperlink{classapp_1_1schemas_1_1context_1_1Context}{Context}} context)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a4ab9608c8ecec1d651acca1c8f1257bd}\label{classapp_1_1modules_1_1memory_1_1Memory_a4ab9608c8ecec1d651acca1c8f1257bd} 
+{\bfseries \+\_\+conversation}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a16ab9914a0bc8b20d2ea0a93835fe9da}\label{classapp_1_1modules_1_1memory_1_1Memory_a16ab9914a0bc8b20d2ea0a93835fe9da} 
+\index{app.modules.memory.Memory@{app.modules.memory.Memory}!get\_context@{get\_context}}
+\index{get\_context@{get\_context}!app.modules.memory.Memory@{app.modules.memory.Memory}}
+\doxysubsubsection{\texorpdfstring{get\_context()}{get\_context()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} app.\+modules.\+memory.\+Memory.\+get\+\_\+context (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Reimplemented from \mbox{\hyperlink{classapp_1_1modules_1_1module_1_1Module}{app.\+modules.\+module.\+Module}}.
+
+\Hypertarget{classapp_1_1modules_1_1memory_1_1Memory_a5ae5e9166f660cce414bdd41464f2aba}\label{classapp_1_1modules_1_1memory_1_1Memory_a5ae5e9166f660cce414bdd41464f2aba} 
+\index{app.modules.memory.Memory@{app.modules.memory.Memory}!run@{run}}
+\index{run@{run}!app.modules.memory.Memory@{app.modules.memory.Memory}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily app.\+modules.\+memory.\+Memory.\+run (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{\mbox{\hyperlink{classapp_1_1schemas_1_1state_1_1State}{State}}}]{state,  }\item[{\mbox{\hyperlink{classapp_1_1schemas_1_1context_1_1Context}{Context}}}]{context }\end{DoxyParamCaption})}
+
+
+
+Reimplemented from \mbox{\hyperlink{classapp_1_1modules_1_1module_1_1Module}{app.\+modules.\+module.\+Module}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+app/modules/memory.\+py\end{DoxyCompactItemize}

@@ -35,32 +35,6 @@ class Agent:
         chain = self._prompt | self._model
         return chain.invoke(variables)
 
-    def get_response_with_memory(
-        self,
-        session_id: int,
-        user_question: Optional[str] = None,
-        add_to_history: bool = True,
-        dynamic_variables: Optional[Dict[str, Any]] = None,
-        **invoke_kwargs,
-    ) -> AIMessage:
-
-        if user_question and add_to_history:
-            self._memory.add_user_message(session_id, user_question)
-
-        history = self._memory.get_session_by_id(session_id)
-        prompt_copy = self._prompt.model_copy()
-        print(f"History : {history}")
-        for message in history.messages:
-            prompt_copy.messages.append(message)
-
-        chain = prompt_copy | self._model
-        result = chain.invoke(dynamic_variables or {}, **invoke_kwargs)
-
-        if add_to_history:
-            self._memory.add_ai_message(session_id, result.content)
-
-        return result
-
     def run(self, state: State, runtime: Runtime[Context]):
         variables = {
             "input": state["input"],

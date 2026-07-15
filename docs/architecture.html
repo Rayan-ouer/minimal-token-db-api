@@ -1,0 +1,224 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minimal Token DB API - Architecture</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f5f1;
+    --fg: #1f2937;
+    --muted: #5b6475;
+    --line: #62718a;
+    --neutral: #e5e7eb;
+    --input: #c7e6ff;
+    --process: #d8d0ff;
+    --storage: #d8f3ea;
+    --external: #fde3a7;
+    --risk: #ffd2d2;
+    --surface: rgba(255, 255, 255, 0.72);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --fg: #e5e7eb;
+      --muted: #a3adbd;
+      --line: #93a4bd;
+      --neutral: #263244;
+      --input: #1d4ed8;
+      --process: #4338ca;
+      --storage: #0f766e;
+      --external: #92400e;
+      --risk: #991b1b;
+      --surface: rgba(15, 23, 42, 0.72);
+    }
+  }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(199, 230, 255, 0.35), transparent 28%),
+      radial-gradient(circle at top right, rgba(216, 208, 255, 0.24), transparent 30%),
+      linear-gradient(180deg, var(--bg), var(--bg));
+    color: var(--fg);
+    font:
+      14px/1.4 ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+  main {
+    max-width: 1240px;
+    margin: 24px auto 40px;
+    padding: 0 20px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    padding: 18px 18px 10px;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(4px);
+  }
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 6px 14px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+    fill: var(--fg);
+  }
+  .label {
+    font-size: 14px;
+    font-weight: 650;
+    fill: var(--fg);
+  }
+  .small {
+    font-size: 12px;
+    fill: var(--muted);
+  }
+  .node {
+    stroke: var(--line);
+    stroke-width: 1.3;
+    rx: 18;
+    ry: 18;
+  }
+  .neutral {
+    fill: var(--neutral);
+  }
+  .input {
+    fill: var(--input);
+  }
+  .process {
+    fill: var(--process);
+  }
+  .storage {
+    fill: var(--storage);
+  }
+  .external {
+    fill: var(--external);
+  }
+  .risk {
+    fill: var(--risk);
+  }
+  .zone {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1;
+    stroke-dasharray: 7 6;
+    opacity: 0.7;
+  }
+  .edge {
+    stroke: var(--line);
+    stroke-width: 1.6;
+    fill: none;
+    marker-end: url(#arrow);
+  }
+</style>
+<main>
+  <div class="card">
+    <div class="header">
+      <h1>Minimal Token DB API</h1>
+      <div class="subtitle">Architecture view from the current codebase</div>
+    </div>
+    <svg viewBox="0 0 1240 760" role="img" aria-labelledby="title desc">
+      <title id="title">Minimal Token DB API architecture</title>
+      <desc id="desc">Client request enters FastAPI, is translated into a LangGraph workflow, uses database and memory modules, and returns a French answer.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"></path>
+        </marker>
+      </defs>
+
+      <!-- background zones -->
+      <rect x="28" y="84" width="250" height="600" class="zone" rx="18"></rect>
+      <text x="52" y="108" class="small">External</text>
+      <rect x="308" y="84" width="280" height="600" class="zone" rx="18"></rect>
+      <text x="332" y="108" class="small">API runtime</text>
+      <rect x="620" y="84" width="272" height="600" class="zone" rx="18"></rect>
+      <text x="644" y="108" class="small">Graph + agents</text>
+      <rect x="920" y="84" width="292" height="600" class="zone" rx="18"></rect>
+      <text x="944" y="108" class="small">Data + providers</text>
+
+      <!-- connectors -->
+      <path class="edge" d="M278 198 L308 198"></path>
+      <path class="edge" d="M588 198 L620 198"></path>
+      <path class="edge" d="M756 266 L756 334"></path>
+      <path class="edge" d="M756 442 L756 510"></path>
+      <path class="edge" d="M892 198 L920 198"></path>
+      <path class="edge" d="M1056 330 L1056 398"></path>
+      <path class="edge" d="M920 548 L892 548"></path>
+      <path class="edge" d="M620 548 L588 548"></path>
+      <path class="edge" d="M308 548 L278 548"></path>
+
+      <!-- left column -->
+      <rect x="52" y="150" width="202" height="96" class="node input"></rect>
+      <text x="153" y="186" text-anchor="middle" class="label">Client / HTTP</text>
+      <text x="153" y="210" text-anchor="middle" class="small">GET /, /health, POST /chat</text>
+
+      <rect x="52" y="506" width="202" height="96" class="node external"></rect>
+      <text x="153" y="542" text-anchor="middle" class="label">Config files</text>
+      <text x="153" y="566" text-anchor="middle" class="small">config.toml, .env</text>
+
+      <!-- api runtime -->
+      <rect x="340" y="150" width="216" height="96" class="node process"></rect>
+      <text x="448" y="186" text-anchor="middle" class="label">FastAPI app</text>
+      <text x="448" y="210" text-anchor="middle" class="small">app/main.py + router</text>
+
+      <rect x="340" y="318" width="216" height="108" class="node process"></rect>
+      <text x="448" y="354" text-anchor="middle" class="label">Startup lifespan</text>
+      <text x="448" y="378" text-anchor="middle" class="small">Load config, build registry,</text>
+      <text x="448" y="396" text-anchor="middle" class="small">compile workflow graph</text>
+
+      <rect x="340" y="506" width="216" height="96" class="node neutral"></rect>
+      <text x="448" y="542" text-anchor="middle" class="label">Pydantic state</text>
+      <text x="448" y="566" text-anchor="middle" class="small">Question, State, Context</text>
+
+      <!-- graph + agents -->
+      <rect x="652" y="150" width="208" height="96" class="node process"></rect>
+      <text x="756" y="186" text-anchor="middle" class="label">Workflows</text>
+      <text x="756" y="210" text-anchor="middle" class="small">LangGraph StateGraph</text>
+
+      <rect x="652" y="318" width="208" height="108" class="node process"></rect>
+      <text x="756" y="354" text-anchor="middle" class="label">Agent registry</text>
+      <text x="756" y="378" text-anchor="middle" class="small">generator, explainer,</text>
+      <text x="756" y="396" text-anchor="middle" class="small">exception</text>
+
+      <rect x="652" y="506" width="208" height="96" class="node storage"></rect>
+      <text x="756" y="542" text-anchor="middle" class="label">Memory module</text>
+      <text x="756" y="566" text-anchor="middle" class="small">Per-session chat history</text>
+
+      <!-- data + providers -->
+      <rect x="948" y="150" width="216" height="96" class="node storage"></rect>
+      <text x="1056" y="186" text-anchor="middle" class="label">MySQL database</text>
+      <text x="1056" y="210" text-anchor="middle" class="small">BMW sales schema</text>
+
+      <rect x="948" y="318" width="216" height="108" class="node external"></rect>
+      <text x="1056" y="354" text-anchor="middle" class="label">LLM providers</text>
+      <text x="1056" y="378" text-anchor="middle" class="small">OpenAI, Groq, Ollama</text>
+      <text x="1056" y="396" text-anchor="middle" class="small">via environment keys</text>
+
+      <rect x="948" y="506" width="216" height="96" class="node risk"></rect>
+      <text x="1056" y="542" text-anchor="middle" class="label">Scheduler jobs</text>
+      <text x="1056" y="566" text-anchor="middle" class="small">Memory reset, LLM refresh</text>
+    </svg>
+  </div>
+</main>

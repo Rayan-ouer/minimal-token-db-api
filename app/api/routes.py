@@ -25,7 +25,13 @@ def get_health():
 
 @agent_rooter.post("/chat")
 async def invoke_agent(question: Question, response: Response, request: Request):
-    state: State = {"input": question.question, "output": None, "decision": None, "tools_output": {}, "messages": {question.session_id: InMemoryChatMessageHistory()}}
+    state: State = {
+        "input": question.question,
+        "output": None,
+        "decision": None,
+        "tools_output": {},
+        "messages": {question.session_id: InMemoryChatMessageHistory()},
+    }
     context: Context = {"uuid": question.session_id, "max_result": 50}
     graph: CompiledStateGraph = request.app.state.graph
     result = await graph.ainvoke(state, context=context)
