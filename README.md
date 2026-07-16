@@ -1,8 +1,16 @@
 # Efficient token workflow engine API
 
-Minimal Token Database API is a FastAPI service built around a LangGraph pipeline that turns natural-language questions into SQL, runs them against a MySQL-compatible database, and returns a plain-language answer with as little token usage as possible.
+Efficient token workflow engine is an extensible framework for building configurable multi-agent AI workflows.
 
-- the runtime pipeline is defined in `config.toml`
+It allows you to:
+
+- Define workflows declaratively using TOML.
+- Compose AI agents with reusable capability modules.
+- Support multiple LLM providers.
+- Build conditional execution graphs with LangGraph.
+- Optimize token usage by routing tasks to specialized agents.
+
+- the runtime pipeline is defined in the CONFIGURATION environnement variable.
 
 ## What it exposes
 
