@@ -137,9 +137,3 @@ app/
 ├── tasks/      # scheduler helpers
 └── workflows/  # LangGraph graph and routing
 ```
-
-## Notes
-
-- The database connector expects MySQL connection details.
-- The SQL prompt is strict about MySQL syntax and automatic `LIMIT` enforcement.
-- The response prompt is in French and keeps answers concise.
